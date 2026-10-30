@@ -25,6 +25,8 @@ import { runSolDeCasaModel } from '../../Engines/solDeCasaEngine.js';
 export default function Dashboard() {
   const navigate = useNavigate();
 
+  const [selectedTrapTab, setSelectedTrapTab] = useState('all');
+
   const tueste = runTuesteModel();
   const agendo = runAgendoModel();
   const solDeCasa = runSolDeCasaModel();
@@ -301,20 +303,72 @@ export default function Dashboard() {
 
       {/* Cross-Analysis: The 3 Traps Exposed Side-by-Side */}
       <div className="space-y-4">
-        <div>
-          <h3 className="text-lg font-bold text-slate-900 tracking-tight">
-            Auditoría de Trampas Financieras
-          </h3>
-          <p className="text-xs text-slate-500">
-            Comparativa directa entre la ilusión propuesta por agencias/fundadores y el cálculo matemático verificado
-          </p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">
+              Auditoría de Trampas Financieras
+            </h3>
+            <p className="text-xs text-slate-500">
+              Comparativa directa entre la ilusión propuesta por agencias/fundadores y el cálculo matemático verificado
+            </p>
+          </div>
+
+          {/* Trap Case Switcher */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+            <button
+              onClick={() => setSelectedTrapTab('all')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                selectedTrapTab === 'all'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Todos los Casos
+            </button>
+            <button
+              onClick={() => setSelectedTrapTab('tueste')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                selectedTrapTab === 'tueste'
+                  ? 'bg-amber-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Tueste (DTC)
+            </button>
+            <button
+              onClick={() => setSelectedTrapTab('agendo')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                selectedTrapTab === 'agendo'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Agendo (SaaS)
+            </button>
+            <button
+              onClick={() => setSelectedTrapTab('solDeCasa')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                selectedTrapTab === 'solDeCasa'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Sol de Casa (Lead Gen)
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <TrapComparisonChart caseKey="tueste" />
-          <TrapComparisonChart caseKey="agendo" />
-          <TrapComparisonChart caseKey="solDeCasa" />
-        </div>
+        {selectedTrapTab === 'all' ? (
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <TrapComparisonChart caseKey="tueste" />
+            <TrapComparisonChart caseKey="agendo" />
+            <TrapComparisonChart caseKey="solDeCasa" />
+          </div>
+        ) : (
+          <div className="max-w-3xl mx-auto">
+            <TrapComparisonChart caseKey={selectedTrapTab} />
+          </div>
+        )}
       </div>
     </div>
   );
