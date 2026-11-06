@@ -49,18 +49,25 @@ export default function Dashboard() {
 
           <div className="flex flex-wrap items-center gap-3">
             <button
+              onClick={() => navigate('/growth')}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-xs sm:text-sm text-white shadow-md shadow-emerald-600/30 transition-all cursor-pointer"
+            >
+              <TrendingUp className="w-4 h-4" />
+              <span>Centro de Growth & Loops Virales (Sesión 2)</span>
+            </button>
+            <button
               onClick={() => navigate('/tableros')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-xs sm:text-sm text-white shadow-md shadow-blue-600/30 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-xs sm:text-sm text-white shadow-md shadow-blue-600/30 transition-all cursor-pointer"
             >
               <Sliders className="w-4 h-4" />
-              <span>Explorar Tableros Interactivos (Nivel 2)</span>
+              <span>Tableros Vivos (Nivel 2)</span>
             </button>
             <button
               onClick={() => navigate('/simuladores')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-xs sm:text-sm text-slate-200 border border-slate-700 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-xs sm:text-sm text-slate-200 border border-slate-700 transition-all cursor-pointer"
             >
               <TrendingUp className="w-4 h-4" />
-              <span>Simuladores de Caja 24M (Nivel 3)</span>
+              <span>Simuladores 24M (Nivel 3)</span>
             </button>
           </div>
         </div>
@@ -167,13 +174,19 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500">Caja inicial: $35,000</span>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
               <button
                 onClick={() => navigate('/tueste')}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:text-amber-900 group-hover:translate-x-1 transition-all"
+                className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 hover:text-amber-900 transition-colors"
               >
-                <span>Ver Caso Completo</span>
+                <span>S1: Finanzas</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => navigate('/tueste/growth')}
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
+              >
+                <span>S2: Rewards</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -227,13 +240,19 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500">Caja inicial: $60,000</span>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
               <button
                 onClick={() => navigate('/agendo')}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-800 hover:text-blue-900 group-hover:translate-x-1 transition-all"
+                className="inline-flex items-center gap-1 text-xs font-bold text-blue-800 hover:text-blue-900 transition-colors"
               >
-                <span>Ver Caso Completo</span>
+                <span>S1: Finanzas</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => navigate('/agendo/growth')}
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
+              >
+                <span>S2: QuickStart</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -287,13 +306,19 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500">Caja inicial: $12,000</span>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
               <button
                 onClick={() => navigate('/sol-de-casa')}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 hover:text-emerald-900 group-hover:translate-x-1 transition-all"
+                className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 hover:text-emerald-900 transition-colors"
               >
-                <span>Ver Caso Completo</span>
+                <span>S1: Finanzas</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => navigate('/sol-de-casa/growth')}
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
+              >
+                <span>S2: Comunidad</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

@@ -1,5 +1,6 @@
 // DecisionLab 360 - Caso C: Sol de Casa (Lead Generation Solar)
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Sun,
   Sliders,
@@ -12,7 +13,8 @@ import {
   CheckCircle2,
   Clock,
   ShieldAlert,
-  Zap
+  Zap,
+  Sparkles
 } from 'lucide-react';
 import KPICard from '../../Components/KPICard/KPICard.jsx';
 import MetricIndicator from '../../Components/MetricIndicator/MetricIndicator.jsx';
@@ -24,6 +26,7 @@ import TrapComparisonChart from '../../Components/Charts/TrapComparisonChart.jsx
 import FunnelChart from '../../Components/Charts/FunnelChart.jsx';
 import CashFlowTable from '../../Components/CashFlowTable/CashFlowTable.jsx';
 import DataTable from '../../Components/DataTable/DataTable.jsx';
+import SolDeCasaGrowthHub from '../Growth/SolDeCasa/SolDeCasaGrowthHub.jsx';
 
 import { runSolDeCasaModel, simulateSolDeCasa24Months } from '../../Engines/solDeCasaEngine.js';
 import { solDeCasaOriginalData } from '../../Data/solDeCasaData.js';
@@ -32,6 +35,10 @@ import { storageService } from '../../Services/storageService.js';
 import { exportService } from '../../Services/exportService.js';
 
 export default function SolDeCasa() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeSession, setActiveSession] = useState(
+    searchParams.get('session') === '2' ? 'session2' : 'session1'
+  );
   // Estado de inputs para interactividad
   const [metaSpend, setMetaSpend] = useState(4000);
   const [googleSpend, setGoogleSpend] = useState(4000);
@@ -155,9 +162,53 @@ export default function SolDeCasa() {
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
-      {/* Top Banner with Brand Identity */}
-      <div className="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 rounded-2xl p-6 sm:p-8 text-white shadow-md border border-emerald-800/80 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6 animate-in fade-in duration-200">
+      {/* Selector de Sesión: Financiero (Sesión 1) vs Growth (Sesión 2) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 p-2 rounded-2xl border border-slate-800 shadow-md">
+        <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs font-bold">
+          <button
+            onClick={() => {
+              setActiveSession('session1');
+              setSearchParams({ session: '1' });
+            }}
+            className={`px-4 py-2 rounded-lg transition-all ${
+              activeSession === 'session1'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            SESIÓN 1 — Análisis Financiero (Nivel 1, 2 y 3)
+          </button>
+          <button
+            onClick={() => {
+              setActiveSession('session2');
+              setSearchParams({ session: '2' });
+            }}
+            className={`px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
+              activeSession === 'session2'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>SESIÓN 2 — Solución de Growth (Comunidad Solar)</span>
+            <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">Nuevo</span>
+          </button>
+        </div>
+
+        <div className="text-right pr-2">
+          <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+            {activeSession === 'session1' ? 'Modelado Visitas & LTV:CAC 24M' : 'Portal Ahorro & Comunidad Solar'}
+          </span>
+        </div>
+      </div>
+
+      {activeSession === 'session2' ? (
+        <SolDeCasaGrowthHub />
+      ) : (
+        <div className="space-y-8">
+          {/* Top Banner with Brand Identity */}
+          <div className="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 rounded-2xl p-6 sm:p-8 text-white shadow-md border border-emerald-800/80 flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
@@ -629,8 +680,10 @@ export default function SolDeCasa() {
           <p>
             <strong>4. Impacto Proyectado en Caja:</strong> Sol de Casa eleva sus ventas a más de 28 instalaciones al mes, acumula <strong>$215,000 en el banco</strong> al Mes 24 y mantiene su piso de $5,000 completamente a salvo en todos los períodos.
           </p>
+          </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

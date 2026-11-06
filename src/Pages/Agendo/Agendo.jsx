@@ -1,5 +1,6 @@
 // DecisionLab 360 - Caso B: Agendo (Software SaaS)
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   CalendarCheck,
   Sliders,
@@ -10,7 +11,8 @@ import {
   DollarSign,
   FileSpreadsheet,
   CheckCircle2,
-  Clock
+  Clock,
+  Zap
 } from 'lucide-react';
 import KPICard from '../../Components/KPICard/KPICard.jsx';
 import MetricIndicator from '../../Components/MetricIndicator/MetricIndicator.jsx';
@@ -20,6 +22,7 @@ import InvestmentHistoryChart from '../../Components/Charts/InvestmentHistoryCha
 import TrapComparisonChart from '../../Components/Charts/TrapComparisonChart.jsx';
 import CashFlowTable from '../../Components/CashFlowTable/CashFlowTable.jsx';
 import DataTable from '../../Components/DataTable/DataTable.jsx';
+import AgendoGrowthHub from '../Growth/Agendo/AgendoGrowthHub.jsx';
 
 import { runAgendoModel, simulateAgendo24Months } from '../../Engines/agendoEngine.js';
 import { agendoOriginalData } from '../../Data/agendoData.js';
@@ -28,6 +31,10 @@ import { storageService } from '../../Services/storageService.js';
 import { exportService } from '../../Services/exportService.js';
 
 export default function Agendo() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeSession, setActiveSession] = useState(
+    searchParams.get('session') === '2' ? 'session2' : 'session1'
+  );
   // Estado de inputs para interactividad en vivo
   const [adSpend, setAdSpend] = useState(10000);
   const [trialConversionRate, setTrialConversionRate] = useState(14.0);
@@ -175,9 +182,53 @@ export default function Agendo() {
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
-      {/* Top Banner with Brand Identity */}
-      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-md border border-blue-800/80 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6 animate-in fade-in duration-200">
+      {/* Selector de Sesión: Financiero (Sesión 1) vs Growth (Sesión 2) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 p-2 rounded-2xl border border-slate-800 shadow-md">
+        <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs font-bold">
+          <button
+            onClick={() => {
+              setActiveSession('session1');
+              setSearchParams({ session: '1' });
+            }}
+            className={`px-4 py-2 rounded-lg transition-all ${
+              activeSession === 'session1'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            SESIÓN 1 — Análisis Financiero (Nivel 1, 2 y 3)
+          </button>
+          <button
+            onClick={() => {
+              setActiveSession('session2');
+              setSearchParams({ session: '2' });
+            }}
+            className={`px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
+              activeSession === 'session2'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>SESIÓN 2 — Solución de Growth (Agendo QuickStart)</span>
+            <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">Nuevo</span>
+          </button>
+        </div>
+
+        <div className="text-right pr-2">
+          <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-wider">
+            {activeSession === 'session1' ? 'Modelado SaaS & LTV:CAC 24M' : 'Onboarding & Activación en 14 Días'}
+          </span>
+        </div>
+      </div>
+
+      {activeSession === 'session2' ? (
+        <AgendoGrowthHub />
+      ) : (
+        <div className="space-y-8">
+          {/* Top Banner with Brand Identity */}
+          <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-md border border-blue-800/80 flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="p-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30">
@@ -645,8 +696,10 @@ export default function Agendo() {
           <p>
             <strong>4. Resultado Financiero:</strong> Con esta optimización y una inversión moderada de $12,000/mes, Agendo genera $245,000 de caja al Mes 24, mantiene a raya la necesidad de vendedoras adicionales y alcanza más de 1,900 clientes activos sin poner en riesgo los $10,000 de piso de seguridad.
           </p>
+          </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 // DecisionLab 360 - Caso A: Tueste (E-commerce DTC)
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Coffee,
   Sliders,
@@ -10,7 +11,8 @@ import {
   DollarSign,
   Users,
   CheckCircle2,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Gift
 } from 'lucide-react';
 import KPICard from '../../Components/KPICard/KPICard.jsx';
 import MetricIndicator from '../../Components/MetricIndicator/MetricIndicator.jsx';
@@ -21,6 +23,7 @@ import InvestmentHistoryChart from '../../Components/Charts/InvestmentHistoryCha
 import TrapComparisonChart from '../../Components/Charts/TrapComparisonChart.jsx';
 import CashFlowTable from '../../Components/CashFlowTable/CashFlowTable.jsx';
 import DataTable from '../../Components/DataTable/DataTable.jsx';
+import TuesteGrowthHub from '../Growth/Tueste/TuesteGrowthHub.jsx';
 
 import { runTuesteModel, simulateTueste24Months } from '../../Engines/tuesteEngine.js';
 import { tuesteOriginalData } from '../../Data/tuesteData.js';
@@ -29,6 +32,10 @@ import { storageService } from '../../Services/storageService.js';
 import { exportService } from '../../Services/exportService.js';
 
 export default function Tueste() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeSession, setActiveSession] = useState(
+    searchParams.get('session') === '2' ? 'session2' : 'session1'
+  );
   // Estado de inputs para interactividad
   const [metaSpend, setMetaSpend] = useState(8000);
   const [discountPercent, setDiscountPercent] = useState(0);
@@ -164,9 +171,53 @@ export default function Tueste() {
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
-      {/* Top Banner with Brand Identity */}
-      <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-950 rounded-2xl p-6 sm:p-8 text-white shadow-md border border-amber-800/80 flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-6 animate-in fade-in duration-200">
+      {/* Selector de Sesión: Financiero (Sesión 1) vs Growth (Sesión 2) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 p-2 rounded-2xl border border-slate-800 shadow-md">
+        <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs font-bold">
+          <button
+            onClick={() => {
+              setActiveSession('session1');
+              setSearchParams({ session: '1' });
+            }}
+            className={`px-4 py-2 rounded-lg transition-all ${
+              activeSession === 'session1'
+                ? 'bg-amber-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            SESIÓN 1 — Análisis Financiero (Nivel 1, 2 y 3)
+          </button>
+          <button
+            onClick={() => {
+              setActiveSession('session2');
+              setSearchParams({ session: '2' });
+            }}
+            className={`px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
+              activeSession === 'session2'
+                ? 'bg-amber-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Gift className="w-3.5 h-3.5" />
+            <span>SESIÓN 2 — Solución de Growth (Tueste Rewards)</span>
+            <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">Nuevo</span>
+          </button>
+        </div>
+
+        <div className="text-right pr-2">
+          <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">
+            {activeSession === 'session1' ? 'Modelado Financiero 24M' : 'Loop de Referidos & Adquisición'}
+          </span>
+        </div>
+      </div>
+
+      {activeSession === 'session2' ? (
+        <TuesteGrowthHub />
+      ) : (
+        <div className="space-y-8">
+          {/* Top Banner with Brand Identity */}
+          <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-950 rounded-2xl p-6 sm:p-8 text-white shadow-md border border-amber-800/80 flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/30">
@@ -625,8 +676,10 @@ export default function Tueste() {
           <p>
             <strong>4. Impacto Proyectado:</strong> Con estos dos ajustes, el LTV a 12 meses sube a $78.40, elevando el ratio LTV:CAC a 1.44x. La caja a 24 meses alcanza los <strong>$112,000</strong>, permitiendo comprar la segunda tostadora de $14,000 en el mes 12 sin poner en riesgo el piso de seguridad de $5,000.
           </p>
+          </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
